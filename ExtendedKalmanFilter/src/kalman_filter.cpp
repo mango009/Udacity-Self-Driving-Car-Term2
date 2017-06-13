@@ -1,4 +1,5 @@
 #include <math.h>
+#include <iostream>
 #include "kalman_filter.h"
 #include "tools.h"
 
@@ -67,6 +68,11 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   VectorXd z_pred = VectorXd(3);
   RadarHofX(z_pred);
   VectorXd y = z - z_pred;
+
+  // normalize the angle so that the value is between -pi and pi
+  while (y(1)> M_PI) y(1)-=2.*M_PI;
+  while (y(1)<-M_PI) y(1)+=2.*M_PI;
+  
 
   MatrixXd Hj = tools.CalculateJacobian(x_);
   MatrixXd Ht = Hj.transpose();
