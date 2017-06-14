@@ -149,7 +149,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    */
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-    ekf_.UpdateEKF(measurement_pack.raw_measurements_);
+    float px = ekf_.x_(0);
+    float py = ekf_.x_(1);
+    if(fabs(px*px+py*py) < 0.0001) {
+      ekf_.UpdateEKF(measurement_pack.raw_measurements_);
+    } else {
+      cout << "Avoiding Division by Zero, skip update step" << endl;
+    }
   } else {
     // Laser updates
     ekf_.Update(measurement_pack.raw_measurements_);
