@@ -3,14 +3,14 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 ## PID Controller
-. P: Propotional Gain. This component is used to compensate the CTE (cross track error). It is proportional to CTE.
+* P: Propotional Gain. This component is used to compensate the CTE (cross track error). It is proportional to CTE.
 A pure P controller is insufficient since there are rate of error and overall system drift needs to be considered and these are
 taken cared of by the D and I components.
 
-. D: This is the differential gain component. It is prototional to the error rate (the difference of CTE between each time step).
+* D: This is the differential gain component. It is prototional to the error rate (the difference of CTE between each time step).
 We rely on this component to compensate the error rate in the system.
 
-. I: This is the integral gain component: If there is a systematic drift in the vehicle this component is utilize to correct the drift.
+* I: This is the integral gain component: If there is a systematic drift in the vehicle this component is utilize to correct the drift.
 
 ## Hyperparameter tuning
 I hope to implement Tweedle algorith in the future. At this step I used manual tuning. The parameters from Sebastian's class seems to be close enough. I implemented a PID controller (actually only the P part) for speed control. The target speed is computed to be inversely proportional to the steering angle and the error between the actual and target speed is fed to the P controller for speed.   
