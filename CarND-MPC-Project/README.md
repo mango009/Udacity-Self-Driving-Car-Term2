@@ -3,6 +3,37 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Model
+We used MPC to control vehicle trajectory. The state variables of MPC includes the following:
+* The X coordinate of the location
+* The Y coordinate of the location
+* The vehicle speed
+* The vehicle orientation (phi)
+* The cross track error (CTE)
+* The orientation error (difference between the vechicle orientation and the trajectory orientation)
+
+MPC is an interative process. We decide the total of timesteps N and the time interval between each step dt. N*dt is thus the
+total time interval MPC used. Each iteration we have 0..t-1 timesteps and the vechicle model describes the relationship of the state variables between two time step:
+* x[t+1] = x[t] + v[t] * cos(psi[t]) * dt
+* y[t+1] = y[t] + v[t] * sin(psi[t]) * dt
+* psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
+* v[t+1] = v[t] + a[t] * dt
+* cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt
+* epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
+
+MPC thus uses a cost function and solve for the optimal orientation and accerleration that need to be at each step to minimize the cost.
+The cost function should minimize the errors such as CTE, orientation error, and velocity error. To make the turn smooth and no jerky motion, we should also include the accerleration and delta in the cost function so that we don't get too large of these valuse. To make the control decision more consistent, we should also include the difference of accerleration and delte between each time step in the cost function. We expect these values to be small.
+
+MPC essentially turn the control problem into an optimization problem at each iteration. For the optimization problem, there are constraints to be considered. The vechicle model described above a expressed in the problem as constraints.
+
+I tried several combination of N and dt and setteled with the the one that will give the model predictin of 1 seconds (N=20, dt=0.05).
+It is also interesting to know that tuning the cost function can have a big impact to the driving behavior. There are weighting factors for each cost and this is a trial and error process.
+
+The incoming coordinate of the waypoints in the global coordinates, I turn these waypoints into vechicle's coordinate before fitting the polynomial.
+
+I simulate the latency of 0.1 second. And to take into account of the latency I used the fitted polynomial to predict the state variable for the next 0.1 second and these are the variables used to the optimizer.
+
+
 ## Dependencies
 
 * cmake >= 3.5
