@@ -28,5 +28,7 @@ ide_profiles/xcode/ExtendedKF.build/
 CODEOWNERS
 *.sh
 Eigen-3.3
+Eigen
+
 
 
